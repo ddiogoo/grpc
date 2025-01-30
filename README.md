@@ -1,2 +1,1 @@
 # grpc
-gRPC implementation examples
