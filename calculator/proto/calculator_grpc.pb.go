@@ -25,6 +25,7 @@ const (
 	CalculatorService_Divide_FullMethodName   = "/calculator.CalculatorService/Divide"
 	CalculatorService_Primes_FullMethodName   = "/calculator.CalculatorService/Primes"
 	CalculatorService_Avg_FullMethodName      = "/calculator.CalculatorService/Avg"
+	CalculatorService_Max_FullMethodName      = "/calculator.CalculatorService/Max"
 )
 
 // CalculatorServiceClient is the client API for CalculatorService service.
@@ -37,6 +38,7 @@ type CalculatorServiceClient interface {
 	Divide(ctx context.Context, in *CalculatorRequest, opts ...grpc.CallOption) (*CalculatorResponse, error)
 	Primes(ctx context.Context, in *PrimesRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[CalculatorResponse], error)
 	Avg(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[AvgRequest, AvgResponse], error)
+	Max(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[MaxRequest, MaxResponse], error)
 }
 
 type calculatorServiceClient struct {
@@ -119,6 +121,19 @@ func (c *calculatorServiceClient) Avg(ctx context.Context, opts ...grpc.CallOpti
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type CalculatorService_AvgClient = grpc.ClientStreamingClient[AvgRequest, AvgResponse]
 
+func (c *calculatorServiceClient) Max(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[MaxRequest, MaxResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &CalculatorService_ServiceDesc.Streams[2], CalculatorService_Max_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[MaxRequest, MaxResponse]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type CalculatorService_MaxClient = grpc.BidiStreamingClient[MaxRequest, MaxResponse]
+
 // CalculatorServiceServer is the server API for CalculatorService service.
 // All implementations must embed UnimplementedCalculatorServiceServer
 // for forward compatibility.
@@ -129,6 +144,7 @@ type CalculatorServiceServer interface {
 	Divide(context.Context, *CalculatorRequest) (*CalculatorResponse, error)
 	Primes(*PrimesRequest, grpc.ServerStreamingServer[CalculatorResponse]) error
 	Avg(grpc.ClientStreamingServer[AvgRequest, AvgResponse]) error
+	Max(grpc.BidiStreamingServer[MaxRequest, MaxResponse]) error
 	mustEmbedUnimplementedCalculatorServiceServer()
 }
 
@@ -156,6 +172,9 @@ func (UnimplementedCalculatorServiceServer) Primes(*PrimesRequest, grpc.ServerSt
 }
 func (UnimplementedCalculatorServiceServer) Avg(grpc.ClientStreamingServer[AvgRequest, AvgResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method Avg not implemented")
+}
+func (UnimplementedCalculatorServiceServer) Max(grpc.BidiStreamingServer[MaxRequest, MaxResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method Max not implemented")
 }
 func (UnimplementedCalculatorServiceServer) mustEmbedUnimplementedCalculatorServiceServer() {}
 func (UnimplementedCalculatorServiceServer) testEmbeddedByValue()                           {}
@@ -268,6 +287,13 @@ func _CalculatorService_Avg_Handler(srv interface{}, stream grpc.ServerStream) e
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type CalculatorService_AvgServer = grpc.ClientStreamingServer[AvgRequest, AvgResponse]
 
+func _CalculatorService_Max_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(CalculatorServiceServer).Max(&grpc.GenericServerStream[MaxRequest, MaxResponse]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type CalculatorService_MaxServer = grpc.BidiStreamingServer[MaxRequest, MaxResponse]
+
 // CalculatorService_ServiceDesc is the grpc.ServiceDesc for CalculatorService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -301,6 +327,12 @@ var CalculatorService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "Avg",
 			Handler:       _CalculatorService_Avg_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "Max",
+			Handler:       _CalculatorService_Max_Handler,
+			ServerStreams: true,
 			ClientStreams: true,
 		},
 	},
