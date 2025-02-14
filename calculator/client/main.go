@@ -19,5 +19,6 @@ func main() {
 	//doCalculator(c)
 	//doPrimes(c)
 	//doCalculatorAvg(c)
-	doCalculatorMax(c)
+	//doCalculatorMax(c)
+	doSqrt(c, 16)
 }
