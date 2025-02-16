@@ -1,17 +1,31 @@
 package main
 
 import (
+	"log"
+	"os"
 	"time"
 
 	pb "github.com/ddiogoo/grpc/greet/proto"
+	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/credentials"
 )
 
 var addr string = "localhost:50051"
 
 func main() {
-	conn, err := grpc.NewClient(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	godotenv.Load()
+	opts := []grpc.DialOption{}
+	tsl := os.Getenv("ENABLE_TLS") == "true"
+	if tsl {
+		certFile := os.Getenv("CERT_CLIENT_FILE_PATH")
+		creds, err := credentials.NewClientTLSFromFile(certFile, "")
+		if err != nil {
+			log.Fatalf("Error while loading CA certificates: %v", err)
+		}
+		opts = append(opts, grpc.WithTransportCredentials(creds))
+	}
+	conn, err := grpc.NewClient(addr, opts...)
 	if err != nil {
 		panic(err)
 	}
