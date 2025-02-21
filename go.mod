@@ -7,6 +7,8 @@ require (
 	google.golang.org/protobuf v1.36.4
 )
 
+require github.com/montanaflynn/stats v0.7.1 // indirect
+
 require (
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
