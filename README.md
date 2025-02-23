@@ -123,6 +123,36 @@ exit
 
 You can do the same for all services and methods.
 
+## Running Blog project
+
+### Running MongoDB
+
+To run MongoDB, you need to run the following command:
+
+```bash
+docker-compose up -d
+```
+
+### Running client and server
+
+You need to generate the gRPC code:
+
+```bash
+make blog
+```
+
+You need to run the server:
+
+```bash
+./bin/blog/server
+```
+
+You can run the client:
+
+```bash
+./bin/blog/client
+```
+
 ## License
 
 This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
