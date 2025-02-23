@@ -20,4 +20,5 @@ func main() {
 	readBlog(c, id)
 	updateBlog(c, id)
 	readBlog(c, id)
+	listBlogs(c)
 }
