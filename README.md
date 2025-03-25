@@ -10,7 +10,7 @@ First, you need to install the protocol buffer compiler (protoc) and the Go plug
 
 ## Configuration
 
-### Generate the gRPC code
+### *Generate the gRPC code*
 
 To generate the gRPC code, you need to run the following command:
 
@@ -18,7 +18,7 @@ To generate the gRPC code, you need to run the following command:
 make greet && make calculator
 ```
 
-### Generate SSL certificates
+### *Generate SSL certificates*
 
 To generate the SSL certificates, you need to run the following command:
 
@@ -39,7 +39,7 @@ If you want to disable TLS, you must set the `ENABLE_TLS` variable to `false`.
 
 ## Usage
 
-### Run the server
+### *Run the server*
 
 To run the server, you need to run the following command:
 
@@ -53,7 +53,7 @@ You will do the same for the calculator server if you want to run it:
 ./bin/calculator/server
 ```
 
-### Run the client
+### *Run the client*
 
 To run the client, you need to run the following command:
 
@@ -125,7 +125,7 @@ You can do the same for all services and methods.
 
 ## Running Blog project
 
-### Running MongoDB
+### *Running MongoDB*
 
 To run MongoDB, you need to run the following command:
 
@@ -133,7 +133,7 @@ To run MongoDB, you need to run the following command:
 docker-compose up -d
 ```
 
-### Running client and server
+### *Running client and server*
 
 You need to generate the gRPC code:
 
